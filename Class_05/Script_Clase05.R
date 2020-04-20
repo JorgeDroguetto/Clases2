@@ -3,11 +3,13 @@
 # Basado en Datos COVID19 CHILE
 # Fuente: https://github.com/MinCiencia/Datos-COVID19 
 
+
 #install.packages('sf')
 library(data.table)
 library(ggplot2)
 
-covid<-fread(input ="Class_05/2020-04-08-CasosConfirmados.csv")
+covid<-fread(input ="Class_05/2020-04-08-CasosConfirmados.csv")  #fread para correr mejor las tablas 
+view(covid)  # ver como se ordenan los datos 
 str(covid)
 sapply(covid,FUN = class)
 
@@ -17,20 +19,23 @@ ggplot(covid, aes(x=`Casos Confirmados`)) +geom_histogram(stat = 'count')
 ggplot(covid, aes(x=`Casos Confirmados`)) +geom_histogram(stat = 'count')+ geom_density(stat = 'count')
 
 
-# Choropleth maps
+# Choropleth maps veremos mapas 
 library(sf)
 library(chilemapas)
 
-help(package='chilemapas')
+help(package='chilemapas')# chilemapas es un paquete con mapas , puedo llamar a esos mapas que estan dentro
 
 comunas_rm<-mapa_comunas[mapa_comunas$codigo_region==13,]
 
-comunas_rm<-merge(comunas_rm,covid,by.x="codigo_comuna",by.y="Codigo comuna",all.x=TRUE,sort=F)
+comunas_rm<-merge(comunas_rm,covid,by.x="codigo_comuna",by.y="Codigo comuna",all.x=TRUE,sort=F)# puede ser x= comunas_rm, y= covid... / ya lo importante es que el by.x
+#(eso es importante pq ese by.x y .y es pq tienen nombres distintos en el codigo de comuna pero si no seria por  by) me cosidera y deja esas cooumuas si es que existen =TRUE.
+# aca lo importante es ver el codigo comuna, pq es la variable por la que me interesa ordenar comunas_rm y covid
+comunas_rm <- st_sf(comunas_rm) #--- ESTO FUE POR LA WEA D ELAS VERSIONES
 
+# Choropleth plot (continuos scale) --- paletas de colores 
 
-# Choropleth plot (continuos scale)
-
-library(RColorBrewer)
+library(RColorBrewer)  #las paletas
+brewer.pal.info #para ver todas las paletas 
 paleta <- rev(brewer.pal(n = 5,name = "Reds"))
 
 p_cont<-ggplot(comunas_rm) + 
@@ -39,10 +44,10 @@ p_cont<-ggplot(comunas_rm) +
   labs(title = "Casos Confirmados", subtitle = "Región Metropolitana - 2020-04-08") +
   theme_minimal(base_size = 11)
 
-# Choropleth plot (Discrete scale)
+# Choropleth plot (Discrete scale)  ---- escala discreta 
 ## Fixed
 library(classInt)
-help(package='classInt')
+help(package='classInt')  #para ver que puedeo usar, revisar !!!! 
 
 breaks_fixed <- classIntervals(comunas_rm$`Casos Confirmados`, n = 5, style = "fixed", fixedBreaks=c(min(comunas_rm$`Casos Confirmados`,na.rm = T),5,20,50,100,max(comunas_rm$`Casos Confirmados`,na.rm = T)))
 

@@ -40,6 +40,7 @@ Antes de comenzar a trabajar, filtremos la base por el último trimestre disponi
 
 ```{r colapsando base 1}
 cat_ocup <- Tabla_19_19[mes_central == params$month,.(sum(V1)),by= "cae_general_red"]
+cat_ocup
 ```
 
 ## Introducción a comandos básicos de ggplot2

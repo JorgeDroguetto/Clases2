@@ -102,7 +102,8 @@ G<-reshape(E,direction = 'wide',timevar = 'Sexo',v.names = c('AvAge','Casos conf
 #Scatter plot
 #Base R 
 plot(G$`Casos confirmados.Femenino`,G$`Casos confirmados.Masculino`)
-text(x =G$`Casos confirmados.Femenino`,y=G$`Casos confirmados.Masculino`, G$`Centro de salud`,cex=0.5)
+text(x =G$`Casos confirmados.Femenino`,y=G$`Casos confirmados.Masculino`, G$`Centro de salud`,cex=0.5) #hhace que para los x e y los ponga el centro de salud(su nombre)
+# y ademas con una distancia de 0.5
 
 #ggplot2
 library(ggplot2)
